@@ -24,7 +24,6 @@ int main(int argc, char const *argv[])
     cin >> N >> M;
     vector<pair<int, int>> distance(N + 1);
     vector<Edge> edges;
-    vector<vector<bool>> visited(N+1,vector<bool>(N+1,false));
     for (int i = 1; i < 1001; i++) parent[i] = i;
     for (int i = 1; i < N + 1; i++) {
         int x, y;
@@ -36,15 +35,13 @@ int main(int argc, char const *argv[])
         cin >> u >> v;
         auto &x1 = distance[u];
         auto &x2 = distance[v];
-        edges.emplace_back(u, v, distances(x1.first, x2.first, x1.second, x2.second));
-        visited[u][v] = true;
-        visited[v][u] = true;
+        edges.emplace_back(u, v, distances(x1.first, x1.second, x2.first, x2.second));
         unionParent(u, v);
     }
 
     for (int i = 1; i < N + 1; i++) {
         for (int j = i + 1; j < N + 1; j++) {
-            if(!visited[i][j]) {
+            if(findParent(i) != findParent(j)) {
                 auto &x1 = distance[i];
                 auto &x2 = distance[j];
                 edges.emplace_back(i, j, distances(x1.first, x1.second, x2.first, x2.second));
